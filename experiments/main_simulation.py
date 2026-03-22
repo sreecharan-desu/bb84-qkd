@@ -89,9 +89,24 @@ def main():
     prob_noise = aece.predict_eve(test_f_noise)
     prob_eve = aece.predict_eve(test_f_eve)
     
-    print("\nValidation Results:")
-    print(f"  Noise Case Prob(Eve): {prob_noise:.4f} (Actual: 0.0)")
-    print(f"  Eve Case Prob(Eve):   {prob_eve:.4f} (Actual: 1.0)")
+    print("\nValidation Results and Secure Key Rate (SKR):")
+    
+    # Noise Case Analysis
+    is_noise_aborted = prob_noise > 0.5 or test_f_noise['total_qber'] > 0.11
+    skr_noise_aece = aece.calculate_secure_key_rate(test_f_noise['total_qber'], is_abort_forced=is_noise_aborted)
+    skr_noise_static = aece.calculate_secure_key_rate(test_f_noise['total_qber'], is_abort_forced=(test_f_noise['total_qber'] > 0.11))
+    
+    print(f"  [Environment Noise]  Prob(Eve): {prob_noise:.4f} (Actual: 0.0) | QBER: {test_f_noise['total_qber']:.3f}")
+    print(f"      -> AECE SKR: {skr_noise_aece:.3f} | Static 11% SKR: {skr_noise_static:.3f}")
+    
+    # Eve Case Analysis
+    is_eve_aborted = prob_eve > 0.5 or test_f_eve['total_qber'] > 0.11
+    skr_eve_aece = aece.calculate_secure_key_rate(test_f_eve['total_qber'], is_abort_forced=is_eve_aborted)
+    skr_eve_static = aece.calculate_secure_key_rate(test_f_eve['total_qber'], is_abort_forced=(test_f_eve['total_qber'] > 0.11))
+    
+    print(f"  [Sub-Threshold Eve]  Prob(Eve): {prob_eve:.4f}  (Actual: 1.0) | QBER: {test_f_eve['total_qber']:.3f}")
+    print(f"      -> AECE SKR: {skr_eve_aece:.3f} (Aborted!) | Static 11% SKR: {skr_eve_static:.3f} (False Negative Leak!)")
+
     
     # Generate Plot
     os.makedirs('plots', exist_ok=True)

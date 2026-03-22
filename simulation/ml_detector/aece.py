@@ -57,13 +57,25 @@ class AECE:
         prob = self.model.predict_proba(X)[0][1] # Probability of Class 1 (Eve)
         return float(prob)
 
-    def calculate_secure_key_rate_improvement(self, eve_prob, base_skr):
+    def calculate_secure_key_rate(self, qber_key, leak_ec=0.02, is_abort_forced=False):
         """
-        If Eve is identified as 'Sub-Threshold' (e.g. QBER < 11% but non-random errors),
-        Alice and Bob use custom reconciliation instead of aborting.
+        Calculates the asymptotic Secure Key Rate (SKR) based on the formal equation:
+        SKR = R_raw * (1 - h(Q)) - leak_EC
+        If the threshold exceeds bounds or an abort is forced by the AECE, SKR drops to 0.
         """
-        if eve_prob < 0.2: # Low probability of Eve, high SKR
-             return base_skr * 1.3 # 30% improvement claim from the research proposal
+        import math
         
-        # Standard abortion logic if Eve is definitely present
-        return 0.0 if eve_prob > 0.8 else base_skr * (1 - eve_prob)
+        # Binary entropy function h(Q)
+        def h(q):
+            if q <= 0 or q >= 1:
+                return 0
+            return -q * math.log2(q) - (1-q) * math.log2(1-q)
+            
+        if is_abort_forced:
+            return 0.0
+            
+        # Raw rate assumed to be normalized 1.0 for calculation simplicity
+        h_q = h(qber_key)
+        skr = 1.0 * (1 - h_q) - leak_ec
+        
+        return max(0.0, skr)
