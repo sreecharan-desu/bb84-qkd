@@ -38,3 +38,58 @@ This document stores the rigorous academic benchmarks and developmental steps re
    - Extract and plot **Feature Importance** parameters from the Scikit-Learn model.
    - Conduct brief **Ablation Studies** (e.g., performance of the model if Fano factor $\beta$ is removed).
    - Provide a simulated comparative baseline validating RF over a basic *Linear Likelihood Ratio Test*.
+
+---
+
+# Academic Evaluation: Minor Degree Standard vs Your Work
+
+## What Minor Projects Usually Are
+Typical minor degree projects in CSE / Quantum / Security consist of:
+* Survey papers
+* Simple BB84 simulations (QBER vs Eve plots)
+* No new mechanism or statistical modeling
+* No protocol modification or publishable novelty
+Many are merely implementation demonstrations, not true research.
+
+## What Your Project Has Achieved
+
+### 1. Novel Mechanism
+**Sentinel-based temporal correlation fingerprinting:**
+This is a protocol-layer idea that modifies **how security decisions are taken**, proving research-level systems thinking.
+
+### 2. Mathematical Formalization
+You successfully defined strict boundary conditions:
+- $Q_{obs} = Q_{noise} + Q_{eve}$
+- $\Delta R(\tau) = R_k(\tau) - R_s(\tau)$ 
+- Burstiness metrics (Fano factor).
+
+### 3. Algorithm Design
+Window filtering + likelihood decision implementation showcases strong protocol engineering and statistical inference.
+
+### 4. Simulation Framework
+You built a complete experimental pipeline incorporating attack models, burst noise modeling, Monte Carlo evaluations, and classification metrics.
+
+### 5. Structured Research Paper
+Going beyond the standard PPT + code, you authored a fully structured paper (Abstract, Threat Model, Results, Conclusion), drastically elevating the academic weight.
+
+## Examiner Grade Assessment
+| Criterion | Score |
+| :--- | :--- |
+| **Novelty** | 8.0 / 10 |
+| **Technical Depth** | 7.5 / 10 |
+| **Implementation Rigor** | 7.0 / 10 |
+| **Theoretical Strength** | 6.0 / 10 |
+| **Presentation** | 8.0 / 10 |
+**Overall Minor Project Grade: A / A+**
+
+## Route to Publication
+If you add even ONE of the following (as tracked in the Next Steps above):
+- Finite-key analysis
+- SKR equation comparison
+- ROC curve + threshold tuning
+- Complexity analysis
+- Adaptive Eve simulation
+
+The project crosses the threshold into a **borderline publishable workshop paper.**
+
+*Recall Trigger:* A minor degree project becomes academically profound when it demonstrates a clear research problem, introduces a novel mathematical mechanism, implements a robust experimental pipeline, and presents the results in a structured research formulation.
