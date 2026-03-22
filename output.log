@@ -1,0 +1,20 @@
+Traceback (most recent call last):
+  File "/Users/sreecharandesu/Projects/bb84-qkd/experiments/main_simulation.py", line 13, in <module>
+    from simulation.ml_detector.aece import AECE
+  File "/Users/sreecharandesu/Projects/bb84-qkd/simulation/ml_detector/aece.py", line 2, in <module>
+    from sklearn.ensemble import RandomForestClassifier
+  File "/Users/sreecharandesu/Projects/bb84-qkd/.conda/lib/python3.13/site-packages/sklearn/ensemble/__init__.py", line 6, in <module>
+    from sklearn.ensemble._bagging import BaggingClassifier, BaggingRegressor
+  File "/Users/sreecharandesu/Projects/bb84-qkd/.conda/lib/python3.13/site-packages/sklearn/ensemble/_bagging.py", line 18, in <module>
+    from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
+  File "/Users/sreecharandesu/Projects/bb84-qkd/.conda/lib/python3.13/site-packages/sklearn/tree/__init__.py", line 6, in <module>
+    from sklearn.tree._classes import (
+    ...<5 lines>...
+    )
+  File "/Users/sreecharandesu/Projects/bb84-qkd/.conda/lib/python3.13/site-packages/sklearn/tree/_classes.py", line 27, in <module>
+    from sklearn.tree import _criterion, _splitter, _tree
+  File "sklearn/tree/_criterion.pyx", line 1, in init sklearn.tree._criterion
+  File "sklearn/tree/_splitter.pyx", line 1, in init sklearn.tree._splitter
+  File "sklearn/tree/_tree.pyx", line 1, in init sklearn.tree._tree
+  File "<frozen importlib._bootstrap>", line 645, in parent
+KeyboardInterrupt
