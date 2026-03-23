@@ -1,31 +1,48 @@
 # Adaptive Eavesdropping Detection in BB84 QKD Protocols via Sentinel-Correlation Fingerprinting
 
-## Abstract
-Recent implementations of Quantum Key Distribution (QKD) rely primarily on a static scalar threshold for the Quantum Bit Error Rate (QBER), traditionally abandoning keys where QBER exceeds 11%. This static approach ignores the temporal dimensions of error distributions. We propose an Adversarial Error-Classification Engine (AECE) driven by a Sentinel Qubit stream. By analyzing the temporal and spatial correlation of errors across the quantum channel, we generate a high-fidelity "Error Fingerprint" to detect sub-threshold eavesdropping attempts. Our approach yields robust empirical detection against structured channel spoofing and increases the functional Secure Key Rate (SKR) by mitigating conservatively triggered aborts in noisy environments.
+> [!IMPORTANT]
+> This repository presents a novel machine-learning approach to sub-threshold eavesdropping detection in Quantum Key Distribution (QKD) using interspersed sentinel qubits.
 
-## Research Artifacts
-
-### 1. Unified Simulation Notebook
-The [BB84_QKD_Simulation.ipynb](BB84_QKD_Simulation.ipynb) serves as the computational supplement for this research. It contains the complete end-to-end implementation of the sentinel-qubit protocol, noise modeling, adversarial interception modules, and the AECE classification engine.
-
-### 2. Research Manuscript
-The latest draft of the paper, including formal proofs and statistical analysis, is available as a PDF:
-[Full Research Paper (PDF)](bb84_fingerprint_paper.pdf)
-
-## Theoretical Framework
-The project's theoretical groundwork is developed in the LaTeX sources located in the `docs/` directory. These sources define the mathematical formulation of the Error Delta ($\Delta R(\tau)$) and the finite-key hypothesis testing using Hoeffding bounds.
-
-## Getting Started
-To reproduce the findings presented in the manuscript, ensure the `qiskit`, `scikit-learn`, and `matplotlib` libraries are available (pre-configured in the `qiskit-env` environment).
-
-```bash
-jupyter notebook BB84_QKD_Simulation.ipynb
-```
+## 📄 Research Manuscript
+The latest version of the research manuscript, including formal statistical proofs using Hoeffding bounds and information-theoretic security analysis, is available as a PDF:
+**[Download Full Research Paper (PDF)](bb84_fingerprint_paper.pdf)**
 
 ---
 
+## 🔬 Computational Results Overview
+Our simulation framework evaluates the **Adversarial Error-Classification Engine (AECE)** across high-volume, 1,000-qubit distribution streams.
 
+### 1. Error Delta Fingerprinting
+By isolating the error rates of the non-cryptographic sentinel stream, the AECE identifies malicious interference that remains below the classical 11% QBER threshold.
 
-**Author:** Sree Charan Desu  
+![QBER Delta Analysis](fingerprint_analysis.png)
+*Figure 1: Distribution of QBER Delta. The gray area represents the 95% confidence interval ($\mathcal{H}_0$) for stochastic noise, illustrating how adaptive eavesdroppers (X) diverge from the noise floor.*
+
+### 2. Secure Key Rate (SKR) Improvement
+The AECE's dynamic filtering preserves noisy blocks that would otherwise be discarded under static rules, significantly increasing the effective key throughput.
+
+![SKR Comparison](skr_comparison.png)
+*Figure 2: Performance comparison between traditional 11% static abort strategies and the AECE dynamic filtering suite across varying intercept probabilities.*
+
+### 3. Feature Importance Synthesis
+The Random Forest classifier leverages multi-dimensional temporal correlations to distinguish biological decoherence from deterministic state measurements.
+
+![Feature Importance](feature_importance.png)
+*Figure 3: Internal weighting of the AECE classification model, highlighting the prominence of Delta QBER and Burstiness ($\beta$) in detecting sophisticated adversaries.*
+
+---
+
+## 🧪 Simulation Environment
+The [BB84_QKD_Simulation.ipynb](BB84_QKD_Simulation.ipynb) serves as the primary research artifact for reproducibility. It employs a high-performance **vectorized numerical state-vector engine** suitable for large-scale Monte Carlo analysis.
+
+**Core Prerequisites:**
+* `numpy`, `scikit-learn`, `matplotlib`, `qiskit`
+
+## Reproducibility
+To execute the benchmark suite and regenerate the analysis:
+1. Ensure the `qiskit-env` environment is active.
+2. Launch the Jupyter Notebook to explore the interactive results.
+
+---
 **Institutional Affiliation:** IIIT - Andhra Pradesh  
-**Correspondence:** sreecharan309@gmail.com
+**Primary Researcher:** Sree Charan Desu (<sreecharan309@gmail.com>)
