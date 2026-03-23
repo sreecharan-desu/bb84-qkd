@@ -1,9 +1,0 @@
-qiskit
-qiskit-aer
-numpy
-matplotlib
-scikit-learn
-pandas
-flask
-flask-cors
-pytest

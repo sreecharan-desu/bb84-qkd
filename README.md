@@ -1,25 +1,31 @@
-# Adaptive Eavesdropping Detection and Performance Analysis of the BB84 Protocol in Noisy Quantum Channels
+# Adaptive Eavesdropping Detection in BB84 QKD Protocols via Sentinel-Correlation Fingerprinting
 
 ## Abstract
-> **[Read the Full Research Paper (PDF)](docs/bb84_fingerprint_paper.pdf)**
+Recent implementations of Quantum Key Distribution (QKD) rely primarily on a static scalar threshold for the Quantum Bit Error Rate (QBER), traditionally abandoning keys where QBER exceeds 11%. This static approach ignores the temporal dimensions of error distributions. We propose an Adversarial Error-Classification Engine (AECE) driven by a Sentinel Qubit stream. By analyzing the temporal and spatial correlation of errors across the quantum channel, we generate a high-fidelity "Error Fingerprint" to detect sub-threshold eavesdropping attempts. Our approach yields robust empirical detection against structured channel spoofing and increases the functional Secure Key Rate (SKR) by mitigating conservatively triggered aborts in noisy environments.
 
-This paper presents a high-fidelity simulation and analysis of the BB84 Quantum Key Distribution (QKD) protocol. We explore Alice-Bob interaction models, simulate Intercept-Resend (IR) and Photon-Number-Splitting (PNS) attacks by Eve, and quantify the resulting Quantum Bit Error Rate (QBER). Furthermore, we propose a machine learning-based approach to differentiate between stochastic channel noise and deterministic eavesdropping attempts.
+## Research Artifacts
 
-## Our Solution: Attack Fingerprinting
-Most Quantum Key Distribution (QKD) protocols like BB84 rely on a simple threshold: if the Quantum Bit Error Rate (QBER) exceeds 11%, the protocol aborts because the security cannot be guaranteed. However, an intelligent eavesdropper (Eve) can mimic environmental noise to stay *just below* this threshold, slowly leaking key information without being detected.
+### 1. Unified Simulation Notebook
+The [BB84_QKD_Simulation.ipynb](BB84_QKD_Simulation.ipynb) serves as the computational supplement for this research. It contains the complete end-to-end implementation of the sentinel-qubit protocol, noise modeling, adversarial interception modules, and the AECE classification engine.
 
-Instead of measuring the *rate* of errors, we analyze the **Temporal and Spatial Correlation** of those errors.
-1.  **Sentinel Qubits**: Alice and Bob intersperse "sentinel bits" in the stream that are never part of the final key. These bits serve as a real-time monitor for environmental noise.
-2.  **Fingerprinting**: By comparing the correlation patterns of the actual data stream against the sentinel "noise floor," we can identify the specific "fingerprint" of an eavesdropper—even at sub-threshold error rates.
-3.  **AECE**: Our **Adversarial Error-Classification Engine** uses machine learning to distinguish between thermal noise, decoherence, and malicious interception.
+### 2. Research Manuscript
+The latest draft of the paper, including formal proofs and statistical analysis, is available as a PDF:
+[Full Research Paper (PDF)](bb84_fingerprint_paper.pdf)
 
-## Project Structure
-- `/simulation`: Core Qiskit protocol, noise models, and attack modules.
-- `/experiments`: Simulation scripts and performance benchmarking.
-- `/docs`: Research proposal and manuscript drafts.
+## Theoretical Framework
+The project's theoretical groundwork is developed in the LaTeX sources located in the `docs/` directory. These sources define the mathematical formulation of the Error Delta ($\Delta R(\tau)$) and the finite-key hypothesis testing using Hoeffding bounds.
 
-## Quick Start
+## Getting Started
+To reproduce the findings presented in the manuscript, ensure the `qiskit`, `scikit-learn`, and `matplotlib` libraries are available (pre-configured in the `qiskit-env` environment).
+
 ```bash
-conda run -p .conda pip install -r requirements.txt
-conda run -p .conda python simulation/main.py
+jupyter notebook BB84_QKD_Simulation.ipynb
 ```
+
+---
+
+
+
+**Author:** Sree Charan Desu  
+**Institutional Affiliation:** IIIT - Andhra Pradesh  
+**Correspondence:** sreecharan309@gmail.com
