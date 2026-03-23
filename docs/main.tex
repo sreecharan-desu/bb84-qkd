@@ -6,7 +6,8 @@
 \usepackage{amsmath,amssymb}
 \usepackage{graphicx}
 \usepackage{cite}
-\usepackage{newtxtext,newtxmath} % better font weight
+\usepackage{mathptmx} % Times New Roman
+\usepackage{courier}
 \usepackage{booktabs}
 \usepackage{algorithm}
 \usepackage{algorithmic}
@@ -132,7 +133,7 @@ By integrating the AECE Sentinel filtering, we analytically recover aborted bloc
 
 \section{Experimental Simulation and Results}
 
-We developed a robust quantum simulation via IBM's \textit{Qiskit Aer} framework, modeling depolarizing channel variations and Markov noise burst representations. The simulation encompasses 10,000 protocol blocks operating over a baseline 400-qubit distribution stream. 
+We developed a robust quantum simulation via a high-performance vectorized numerical state-vector engine, modeling depolarizing channel variations and Markov noise burst representations. The simulation encompasses a high-volume data acquisition of 1,000-qubit distribution streams across thousands of protocol blocks to ensure statistical significance. 
 
 \begin{figure}[h]
 \centering
