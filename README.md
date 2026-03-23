@@ -3,13 +3,13 @@
 > [!IMPORTANT]
 > This repository presents a novel machine-learning approach to sub-threshold eavesdropping detection in Quantum Key Distribution (QKD) using interspersed sentinel qubits.
 
-## 📄 Research Manuscript
+## Research Manuscript
 The latest version of the research manuscript, including formal statistical proofs using Hoeffding bounds and information-theoretic security analysis, is available as a PDF:
 **[Download Full Research Paper (PDF)](bb84_fingerprint_paper.pdf)**
 
 ---
 
-## 🔬 Computational Results Overview
+## Computational Results Overview
 Our simulation framework evaluates the **Adversarial Error-Classification Engine (AECE)** across high-volume, 1,000-qubit distribution streams.
 
 ### 1. Error Delta Fingerprinting
@@ -32,7 +32,7 @@ The Random Forest classifier leverages multi-dimensional temporal correlations t
 
 ---
 
-## 🧪 Simulation Environment
+## Simulation Environment
 The [BB84_QKD_Simulation.ipynb](BB84_QKD_Simulation.ipynb) serves as the primary research artifact for reproducibility. It employs a high-performance **vectorized numerical state-vector engine** suitable for large-scale Monte Carlo analysis.
 
 **Core Prerequisites:**
@@ -45,4 +45,4 @@ To execute the benchmark suite and regenerate the analysis:
 
 ---
 **Institutional Affiliation:** IIIT - Andhra Pradesh  
-**Primary Researcher:** Sree Charan Desu (<sreecharan309@gmail.com>)
+**Primary Researcher:** Sree Charan Desu (sreecharan309@gmail.com)
