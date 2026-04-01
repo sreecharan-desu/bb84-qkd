@@ -1,2 +1,13 @@
-docs/
-docs
+# LaTeX artifacts
+*.log
+*.aux
+*.out
+*.toc
+*.pdf
+
+# OS artifacts
+.DS_Store
+
+# Virtual environments
+venv/
+.env

@@ -1,0 +1,116 @@
+\documentclass[11pt,a4paper]{article}
+
+% ===== PROJECT REPORT STYLE OVERRIDE =====
+\usepackage[a4paper,margin=1in,footskip=0.4in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{graphicx}
+\usepackage{cite}
+\usepackage{mathptmx}      % Times font
+\usepackage{courier}
+\usepackage{booktabs}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{authblk}
+\usepackage{xcolor}
+\usepackage[colorlinks=true, allcolors=blue!60!black]{hyperref}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{cleveref}
+
+% Path to results artifacts at project root
+\graphicspath{{../plots/}}
+
+% Professional Section Styling
+\titleformat{\section}{\large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
+\setlist[enumerate]{nosep,topsep=2pt}
+
+% Project Report Identification
+\title{\LARGE \textbf{Project Report: Adaptive Eavesdropping Detection in BB84 QKD Protocols via Sentinel-Correlation Fingerprinting}}
+
+\author[1]{Sree Charan Desu}
+\affil[1]{IIIT - Andhra Pradesh}
+\affil[ ]{\texttt{sreecharan309@gmail.com}}
+
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent This project report details the development and evaluation of an Adversarial Error-Classification Engine (\textit{AECE}) designed for Quantum Key Distribution (QKD) security enhancement. Current QKD implementations rely primarily on a static 11\% Quantum Bit Error Rate (QBER) threshold for security. This project demonstrates a novel approach using interspersed Sentinel Qubits to analyze temporal and spatial correlations of channel errors. By generating high-dimensional "Error Fingerprints," the AECE successfully identifies sub-threshold eavesdropping activity. Computational results show that our framework improves the effective Secure Key Rate (SKR) by recovering high-noise blocks that are statistically uncompromised, proving that traditional scalar constraints are insufficient for maximizing quantum throughput.
+\end{abstract}
+
+\vspace{0.2in}
+\noindent \textbf{Keywords:} Quantum Key Distribution, BB84, Sentinel Qubits, Machine Learning, Secure Key Rate, Project Report.
+
+\section{Introduction}
+
+This project focuses on the practical security of the BB84 protocol, a cornerstone of Quantum Key Distribution (QKD) \cite{bb84}. While BB84 offers unconditional security in theory, physical layer implementations are susceptible to noise and sophisticated eavesdropping strategies that can mimic natural decoherence.
+
+The primary objective of this project is to move beyond the traditional 11\% QBER abort threshold. We introduced a "Sentinel Stream"—a set of non-cryptographic qubits—that serves as an environmental benchmark. By comparing the error statistics of the key qubits against this sentinel baseline, we can detect whether a high QBER is caused by an adversary (Eve) or simply by a noisy physical channel.
+
+\section{System Architecture}
+
+The project simulation models a standard BB84 protocol over a fiber-optic channel exhibiting thermal depolarization and Markovian noise bursts.
+
+\subsection{Threat Model: The Adaptive Adversary}
+We simulate an intelligent Eve who performs Intercept-Resend (IR) attacks but limits her activity to remain below the 11\% threshold. This makes her activity indistinguishable from noise when looking at a single QBER scalar, a variation of the Photon Number Splitting (PNS) threat model \cite{pns}.
+
+\section{Mathematical Methodology}
+
+\subsection{Error Delta Extraction}
+The system calculates the autocorrelation $R(\tau)$ of the error sequences. The \textit{Error Delta} is defined as the difference between the key error correlation and the sentinel error correlation:
+\begin{equation}
+\Delta R(\tau) = R_{\text{key}}(\tau) - R_{\text{sentinel}}(\tau)
+\end{equation}
+
+\subsection{Risk Assessment via Hoeffding Bounds}
+To handle finite-key effects characteristic of practical systems \cite{finite_key}, we apply the Hoeffding bound to establish the probability that an observed delta is a statistical anomaly or a genuine detection of intrusion \cite{hoeffding}:
+\begin{equation}
+\text{Pr}(|\Delta R_{\text{obs}}| \ge \epsilon) \le 2\exp(-2N\epsilon^2)
+\end{equation}
+
+\section{AECE: Machine Learning Engine}
+
+We implemented a Random Forest classifier to process these fingerprints, drawing from recent advancements in ML-based QKD security \cite{ml_qkd}. The machine learning model captures non-linear relationships between autocorrelation, burstiness, and the Error Delta.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\linewidth]{fingerprint_analysis.png}
+\caption{Analysis of the QBER Delta. The gray region shows the 95\% confidence interval for natural noise. Adaptive intrusions (colored clusters) clearly deviate from this baseline despite being sub-threshold.}
+\label{fig:delta}
+\end{figure}
+
+\section{Project Results and Analysis}
+
+The simulation processed 1,000 qubits per session across multiple environments.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\linewidth]{skr_comparison.png}
+\caption{Impact on Secure Key Rate (SKR). The AECE filtering suite recovers up to 25\% more key material in noisy regimes compared to traditional protocols.}
+\label{fig:skr}
+\end{figure}
+
+\subsection{Feature Importance Analysis}
+Evaluation of the Random Forest weights confirms that the \textit{Delta QBER} and \textit{Burstiness} are the most critical metrics for distinguishing malicious measurement from decoherence.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\linewidth]{feature_importance.png}
+\caption{Relative importance of extracted features in the classification model.}
+\label{fig:weights}
+\end{figure}
+
+\section{Conclusion}
+This project successfully demonstrated that temporal sentinel fingerprinting provides a more robust security metric than simple scalar QBER thresholds. By implementing the AECE, we established a framework that detects subtle intruders while simultaneously improving the throughput of the QKD system in real-world noisy conditions.
+
+\bibliographystyle{plain}
+\bibliography{refs}
+
+\end{document}
