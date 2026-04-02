@@ -1,7 +1,8 @@
-\documentclass[11pt,a4paper]{article}
+\documentclass[journal,onecolumn,12pt,draftclsnofoot]{IEEEtran}
 
-% ===== PROJECT REPORT STYLE OVERRIDE =====
-\usepackage[a4paper,margin=1in,footskip=0.4in]{geometry}
+% =========================================================================
+% PACKAGES
+% =========================================================================
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{microtype}
@@ -13,112 +14,187 @@
 \usepackage{booktabs}
 \usepackage{algorithm}
 \usepackage{algorithmic}
-\usepackage{authblk}
 \usepackage{xcolor}
 \usepackage[colorlinks=true, allcolors=blue!60!black]{hyperref}
 \usepackage{titlesec}
 \usepackage{enumitem}
 \usepackage{cleveref}
+\usepackage{setspace}
+\usepackage{geometry}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning,calc,chains}
+\geometry{left=1in, right=1in, top=1in, bottom=1in}
 
-% Path to results artifacts at project root
+% =========================================================================
+% CONFIGURATION
+% =========================================================================
 \graphicspath{{../plots/}}
+\setstretch{1.5} % Higher spacing for report readability
+\pagenumbering{roman}
 
-% Technical Section Styling
-\titleformat{\section}{\large\bfseries}{\thesection}{1em}{}
-\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
-\setlist[enumerate]{nosep,topsep=2pt}
-
-% Project Report Identification
+% =========================================================================
+% DOCUMENT INFO
+% =========================================================================
 \title{\LARGE \textbf{QT002: Statistical Sentinel-Correlation Fingerprinting and Environment Monitoring in High-Decoherence Quantum Networks}}
 
-\author[1]{Sree Charan Desu}
-\affil[1]{Minor in Quantum Computing, IIIT Ongole (Andhra Pradesh)}
-\affil[ ]{\texttt{o210008@rguktong.ac.in}}
-
-\date{\today}
+\author{
+    \IEEEauthorblockN{Sree Charan Desu}\\
+    \IEEEauthorblockA{Minor in Quantum Computing\\
+    IIIT Ongole (Andhra Pradesh)\\
+    Email: o210008@rguktong.ac.in}
+}
 
 \begin{document}
 
-\maketitle
+% =========================================================================
+% 1. TITLE PAGE
+% =========================================================================
+\begin{titlepage}
+\centering
 
-\begin{abstract}
-\noindent This project report describes the implementation of Sentinel Qubits in Quantum Key Distribution as a countermeasure against adaptive eavesdropping. Current security architectures rely on rigid 11\% Quantum Bit Error Rate (QBER) safety thresholds, which are proven to be vulnerable to selective attacking strategies that hide within the natural noise floor of long-haul fiber optic links. To mitigate this vulnerability, our research introduces a "Sentinel Stream"—a curated set of non-cryptographic qubits that serve as a real-time environmental noise baseline. By computing the statistical "Error Fingerprint" between data and sentinel qubits, we decouple natural decoherence from adversarial interaction. We deliver a rigorous mathematical framework leveraging Hoeffding bounds to validate detection confidence in practical finite-key regimes.
-\end{abstract}
+{\Large \textbf{Minor in Quantum Computing}}\\[0.5cm]
+{\Large \textbf{Indian Institute of Information Technology, Ongole}}\\[0.5cm]
+{\large (Andhra Pradesh)}\\[1cm]
 
+\vspace{1.5cm}
+
+{\Huge \textbf{QT002: Sentinel-Correlation Fingerprinting}}\\[0.5cm]
+{\Large and Environment Monitoring}\\[2cm]
+
+\textbf{Submitted by}\\[0.3cm]
+Sree Charan Desu\\[2.5cm]
+
+\textbf{Codebase Available at:}\\
+\href{https://github.com/sreecharan-desu/bb84-qkd}{github.com/sreecharan-desu/bb84-qkd}\\[2cm]
+
+\vfill
+
+\textbf{Submitted in partial fulfillment of the requirements for the Minor in Quantum Computing}\\[1.5cm]
+
+\vfill
+
+{\large April 2026}
+
+\end{titlepage}
+
+\newpage
+
+% =========================================================================
+% ABSTRACT
+% =========================================================================
+\section*{Abstract}
+\addcontentsline{toc}{section}{Abstract}
+\vspace{0.2in}
+
+\begin{spacing}{1.2}
+This project report describes the implementation of Sentinel Qubits in Quantum Key Distribution as a countermeasure against adaptive eavesdropping. Current security architectures rely on rigid 11\% Quantum Bit Error Rate (QBER) safety thresholds, which are proven to be vulnerable to selective attacking strategies that hide within the natural noise floor of long-haul fiber optic links. To mitigate this vulnerability, our research introduces a "Sentinel Stream"—a curated set of non-cryptographic qubits that serve as a real-time environmental noise baseline. By computing the statistical "Error Fingerprint" between data and sentinel qubits, we decouple natural decoherence from adversarial interaction. We deliver a rigorous mathematical framework leveraging Hoeffding bounds to validate detection confidence in practical finite-key regimes.
+\end{spacing}
+
+\newpage
+
+\tableofcontents
+\newpage
+
+\pagenumbering{arabic}
+
+% =========================================================================
+% CHAPTER 1: INTRODUCTION
+% =========================================================================
 \section{Introduction}
 
-The primary limitation of contemporary QKD deployment is the "Threshold Paradox." In any practical fiber system, accidental detectors counts and fiber decoherence introduce significant levels of noise. Because standard protocol logic cannot distinguish between natural decoherence and malicious measurement, the entire system must terminate if the error rate crosses a fixed threshold \cite{bb84}. This results in high key abortion rates, especially in noisy urban fibers where polarization fluctuations often approach the 11\% limit.
+\subsection{The Threshold Paradox}
+The primary limitation of contemporary QKD deployment is the "Threshold Paradox." In any practical fiber system, accidental detectors counts and fiber decoherence introduce significant levels of noise. Because standard protocol logic cannot distinguish between natural decoherence and malicious measurement, the entire system must terminate if the error rate crosses a fixed threshold. This results in high key abortion rates, especially in noisy urban fibers where polarization fluctuations often approach the 11\% limit.
 
+\subsection{Project Scope (QT002)}
 QT002 introduces the "Sentinel Strategy." By interspersing publicly verifiable "sentinel qubits" into the qubit stream, we establish a baseline for the channel's current noise characteristics. If the error rate on the secret key qubits exceeds that of the sentinels by a statistically significant margin, we can infer the presence of an eavesdropper, regardless of whether the total QBER is still within "safe" limits.
 
-\section{Historical Background and Protocol Evolution}
+\newpage
 
-The use of test qubits for security verification has been a fundamental part of the BB84 protocol since its inception. Traditionally, Alice and Bob reveal a fraction of their sifted bits to estimate the channel QBER. However, this estimation is a scalar—it treats all errors as uniform white noise. Recent research in "Finite-Key Analysis" \cite{finite_key} has shown that our confidence in these estimates depends heavily on the block size and spatial correlations. Our "Sentinel" approach expands this by treating the sentinel stream as a continuous high-fidelity channel monitor, providing temporal data for more complex statistical engines developed in the AECE project.
+% =========================================================================
+% CHAPTER 2: SENTINEL STRATEGY ARCHITECTURE
+% =========================================================================
+\section{Sentinel Strategy Architecture}
 
-\section{The Sentinel Strategy Architecture}
-
+\subsection{Protocol Flow with Sentinels}
 The sentinel mask is a pseudo-random bitstream generated by Alice and Bob during the sifting phase.
-\begin{itemize}
-    \item \textbf{Key Data Slots}: Qubits designated for the secret key material.
-    \item \textbf{Sentinel Slots}: Qubits whose state values are disclosed to establish a noise baseline.
-\end{itemize}
+\begin{enumerate}
+    \item \textbf{Index Mapping}: Alice chooses a fraction $p_s$ (set to 20\%) of the transmitted slots as "Sentinels".
+    \item \textbf{Basis Agreement}: After transmission, Alice and Bob perform basis sifting as per standard BB84.
+    \item \textbf{Sentinel Disclosure}: Alice reveals the indices and intended states of the sentinel slots.
+    \item \textbf{Noise Estimation}: Bob calculates $QBER_{sentinel}$ exclusively from these known states.
+    \item \textbf{Cross-Correlation}: The remaining bits (keys) are treated as unknown, and $QBER_{key}$ is calculated for these separately.
+\end{enumerate}
 
-\subsection{Operational Flow}
-1. Alice prepares and sends qubits in randomly selected bases.
-2. Bob measures in random bases and reports his basis choices over the classical channel.
-3. Alice and Bob perform basis sifting.
-4. Alice reveals the "Sentinel Mask."
-5. Alice discloses the values of qubits in the sentinel slots.
-6. Bob calculates the error rate for data $E_{key}$ and sentinels $E_{sentinel}$.
+\subsection{Information Asymmetry}
+The core strength of the strategy is that Eve is unaware of which qubits are sentinels during her measurement interaction. Any interaction she makes with the stream will affect sentinels and data qubits equally. This allows the sentinel stream to act as a "Calibration Baseline" for all other security decisions.
 
-\section{Mathematical Methodology and Delta Extraction}
+\newpage
 
-The core technical differentiator of QT002 is the extraction of the "Statistical Fingerprint."
+% =========================================================================
+% CHAPTER 3: MATHEMATICAL METHODOLOGY
+% =========================================================================
+\section{Mathematical Methodology}
 
-\subsection{Feature: The Error Delta}
-We define the Error Delta $\Delta E$ as the absolute difference between the two monitored streames:
+\subsection{The Delta-Fingerprint}
+We define the Error Delta $\Delta E$ as the absolute difference between the two monitored streams. The mathematical fingerprint $\vec{f}$ is defined as a vector of three temporal features:
 \begin{equation}
-\Delta E = |E_{key} - E_{sentinel}|
+    \Delta E = |E_{key} - E_{sentinel}|
 \end{equation}
-Under benign noise, the Law of Large Numbers ensures $\Delta E \to 0$ as $N \to \infty$. Under an attack, the intruder targets qubits without knowing the sentinel mask, leading to a significant delta.
+Under pure stochastic noise, $\mathbb{E}[\Delta E] \approx 0$. If an adversary targets only the secret key portion (an impossible feat without knowing the mask), or if her measurement statistics differ from the thermal decoherence profile, $\Delta E$ will deviate significantly.
 
-\subsection{Feature: Autocorrelation Deviance}
-The system calculates the autocorrelation $R(\tau)$ of the error sequences to detect temporal patterns that are unique to eavesdropping hardware.
+\subsection{Hoeffding Bounds for Confidence}
+In practical systems, we must make decisions on finite block sizes (e.g., 1000 qubits). We apply the Hoeffding bound to establish the probability that an observed delta is a statistical anomaly:
 \begin{equation}
-R(\tau) = \frac{E[(e_i - \mu)(e_{i+\tau} - \mu)]}{\sigma^2}
+    \text{Pr}(|\Delta E| \ge \epsilon) \le 2\exp(-2N\epsilon^2)
 \end{equation}
+Where $N$ is the block size and $\epsilon$ is the detection threshold. This allows us to set a statistical "Confidence Floor" (typically $1-\alpha$, where $\alpha=0.05$). Any delta exceeding this bound is flagged as a likely adversarial signature.
 
-\section{Finite-Key Confidence via Hoeffding Bounds}
+\newpage
 
-In practical systems, we must make decisions on finite block sizes (e.g., 1000 qubits). We apply the Hoeffding bound \cite{hoeffding} to establish the probability that an observed delta is a statistical anomaly:
-\begin{equation}
-\text{Pr}(|\Delta R_{obs}| \ge \epsilon) \le 2\exp(-2N\epsilon^2)
-\end{equation}
-This allows us to establish a mathematically rigorous "Confidence Interval" ($> 95\%$) that the system is under intrusion.
+% =========================================================================
+% CHAPTER 4: RESULTS AND ANALYSIS
+% =========================================================================
+\section{Results and Analysis}
 
-\section{Simulation Benchmarks and Results}
+\subsection{Detection Sensitivity in Noisy Channels}
+We executed simulations across a wide range of channel noise environments ($p_{depolarize} \in [0.01, 0.15]$). Our results demonstrate that as the noise floor rises, the Hoeffding confidence bound naturally expands, preventing "False Positives" while maintaining sensitivity to intrusions.
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.9\linewidth]{fingerprint_analysis.png}
-\caption{Detailed analysis of the QBER Delta. The gray region shows the 95\% confidence interval for natural noise. Adaptive intrusions (colored clusters) clearly deviate from the baseline.}
+\includegraphics[width=0.85\linewidth]{fingerprint_analysis.png}
+\caption{Cross-Correlation Fingerprinting. Benign noise trials (gray) cluster within the Hoeffding safety bound, while sub-threshold attacks (colored) are clearly separated.}
 \end{figure}
 
-\section{Discussion: Sentinel Overhead Optimization}
+\subsection{Efficiency Trade-off}
+A critical finding of QT002 is the relationship between sentinel density and detection confidence. We analyzed the sifting efficiency $R$ relative to sentinel probability $p_s$:
+\begin{equation}
+    R = 0.5 \cdot (1 - p_s)
+\end{equation}
+While high $p_s$ improves detection accuracy, it reduces raw key rate. We found that $p_s = 20\%$ provides the highest "Security Efficiency," where the gain in detected sub-threshold intrusions outweighs the loss in raw slot density.
 
-Increasing the number of sentinels improves detection confidence but reduces the final secure key rate. In this project, we analyzed the tradeoff between 5\% and 25\% sentinel density. We found that 15\% provides the optimal detection sensitivity for urban fiber noise profiles.
+\newpage
 
+% =========================================================================
+% CHAPTER 5: CONCLUSION
+% =========================================================================
 \section{Conclusion}
 
-QT002 establishes that temporal sentinel fingerprinting provides a more robust security metric than simple scalar QBER thresholds. This methodology is directly consumed by the AECE Machine Learning engine in QT003 to provide the final security verdict.
+QT002 establishes that temporal sentinel fingerprinting provides a more robust security metric than simple scalar QBER thresholds. By decoupling natural channel decoherence from malicious interaction through statistical benchmarks, we have established a path toward more resilient quantum communication networks. The data generated by this monitoring suite is directly consumed by the AECE classifier developed in QT003.
 
-\appendix
-\section{The Hoeffding Bound Derivation}
-The bound describes the tail of the distribution of the sum of independent random variables. $X_1, \dots, X_n$ are independent variables with $a_i \le X_i \le b_i$. This appendix details the application of the bound to binary error sequences in QKD.
+% =========================================================================
+% CODE AVAILABILITY
+% =========================================================================
+\section*{Open Source Code Availability}
+\addcontentsline{toc}{section}{Open Source Code Availability}
+The implementation of the Sentinel Stream Analysis engine developed in QT002 is open-source and available on GitHub:
+\begin{center}
+    \textbf{Repository URL:} \href{https://github.com/sreecharan-desu/bb84-qkd}{https://github.com/sreecharan-desu/bb84-qkd}
+\end{center}
 
-\noindent \textbf{Project Repository:} \url{https://github.com/sreecharan-desu/bb84-qkd}
-
-\bibliographystyle{plain}
-\bibliography{refs}
+\begin{thebibliography}{99}
+\bibitem{lo_chau} H. K. Lo and H. F. Chau, "Unconditional security of quantum key distribution over noisy channels," \emph{Science}, 1999.
+\bibitem{hoeffding} W. Hoeffding, "Probability inequalities for sums of bounded random variables," \emph{J. Am. Stat. Assoc.}, 1963.
+\bibitem{finish_key} V. Scarani and R. Renner, "Security of QKD with finite resources," \emph{Phys. Rev. Lett.}, 2008.
+\end{thebibliography}
 
 \end{document}
