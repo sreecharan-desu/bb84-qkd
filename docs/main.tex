@@ -39,9 +39,9 @@
 
 \author{
     \IEEEauthorblockN{Sree Charan Desu}\\
-    \IEEEauthorblockA{Department of Computer Science and Engineering\\
-    Indian Institute of Information Technology, Andhra Pradesh\\
-    Email: sreecharan309@gmail.com}
+    \IEEEauthorblockA{Minor in Quantum Computing\\
+    IIIT Ongole (Andhra Pradesh)\\
+    Email: o210008@rguktong.ac.in}
 }
 
 \begin{document}
@@ -52,22 +52,25 @@
 \begin{titlepage}
 \centering
 
-{\Large \textbf{Department of Computer Science and Engineering}}\\[0.5cm]
-{\Large \textbf{Indian Institute of Information Technology, Andhra Pradesh}}\\[0.5cm]
-{\large (IIIT Andhra Pradesh)}\\[1cm]
+{\Large \textbf{Minor in Quantum Computing}}\\[0.5cm]
+{\Large \textbf{Indian Institute of Information Technology, Ongole}}\\[0.5cm]
+{\large (Andhra Pradesh)}\\[1cm]
 
 \vspace{1.5cm}
 
-{\Huge \textbf{Adaptive Eavesdropping Detection in BB84 QKD}}\\[0.5cm]
+{\Huge \textbf{Adaptive Eavesdropping Detection in BB84}}\\[0.8cm]
+{\Huge \textbf{QKD}}\\[0.8cm]
 {\Large via Sentinel-Correlation Fingerprinting}\\[2cm]
 
 \textbf{Submitted by}\\[0.3cm]
-Sree Charan Desu\\[1cm]
+Sree Charan Desu\\[2.5cm]
+
+\textbf{Codebase Available at:}\\
+\href{https://github.com/sreecharan-desu/bb84-qkd}{github.com/sreecharan-desu/bb84-qkd}\\[2cm]
 
 \vfill
 
-\textbf{Submitted in partial fulfillment of the requirements}\\
-\textbf{for the degree of B.Tech in Computer Science and Engineering}\\[1.5cm]
+\textbf{Submitted in partial fulfillment of the requirements for the Minor in Quantum Computing}\\[1.5cm]
 
 \vfill
 
@@ -84,14 +87,14 @@ Sree Charan Desu\\[1cm]
 \addcontentsline{toc}{section}{Certificate}
 \vspace{0.5in}
 
-This is to certify that the project entitled \textbf{``Adaptive Eavesdropping Detection and Secure Key Rate Optimization in BB84 QKD via Sentinel-Correlation Fingerprinting''} is a bona-fide work carried out by \textbf{Sree Charan Desu} in partial fulfillment of the requirements for the award of the degree of \textbf{Bachelor of Technology in Computer Science and Engineering} at Indian Institute of Information Technology, Andhra Pradesh.
+This is to certify that the project entitled \textbf{``Adaptive Eavesdropping Detection and Secure Key Rate Optimization in BB84 QKD via Sentinel-Correlation Fingerprinting''} is a bona-fide work carried out by \textbf{Sree Charan Desu} in partial fulfillment of the requirements for the award of the degree of \textbf{Minor in Quantum Computing} at Indian Institute of Information Technology, Ongole (Andhra Pradesh).
 
 \vspace{1in}
 
 \noindent \textbf{Project Supervisor} \hfill \textbf{Head of Department} \\
 Dr. [Enter Supervisor Name] \hfill Dr. [Enter HOD Name] \\
 Assistant Professor \hfill Associate Professor \\
-Dept. of CSE \hfill Dept. of CSE
+Minor in Quantum Computing \hfill Minor in Quantum Computing
 
 \newpage
 
@@ -120,7 +123,7 @@ I, \textbf{Sree Charan Desu}, hereby declare that the work presented in this pro
 
 I would like to express my sincere gratitude to my project supervisor, \textbf{Dr. [Supervisor Name]}, for their invaluable guidance, encouragement, and technical insights throughout the duration of this research. Their expertise in quantum computing and information security has been instrumental in shaping the methodology of this project.
 
-I am also thankful to the Department of Computer Science and Engineering at IIIT Andhra Pradesh for providing the computational resources and environment necessary for this simulation-intensive study. 
+I am also thankful to the Minor in Quantum Computing at IIIT Ongole (Andhra Pradesh) for providing the computational resources and environment necessary for this simulation-intensive study. 
 
 Finally, I would like to thank my family and friends for their constant support and patience during the long hours of development and writing that went into this project report.
 
@@ -136,7 +139,7 @@ Finally, I would like to thank my family and friends for their constant support 
 \begin{spacing}{1.2}
 This project report details a comprehensive research effort to modernize the security architecture of the BB84 Quantum Key Distribution (QKD) protocol. Practical QKD implementations are currently limited by the use of static error thresholds—typically the 11\% Quantum Bit Error Rate (QBER) boundary derived from the Shannon entropy of Intercept-Resend attacks. In real-world fiber-optic environments, high levels of natural decoherence can approach this threshold, leading to either unnecessary key abortion or vulnerability to adaptive eavesdropping attacks that hide within the noise floor. 
 
-To address this, we propose and implement the Adversarial Error-Classification Engine (AECE). The system utilizes an interspersed "Sentinel Qubit" strategy to establish a real-time environmental noise baseline. By extracting high-dimensional "Error Fingerprints"—including autocorrelation coefficients, burstiness factors, and QBER deltas—the AECE utilizes a Random Forest-based ensemble classifier to distinguish between stochastic thermal noise and deterministic state measurements. Our simulation framework, built on high-performance vectorized state math, demonstrates that the AECE can detect sub-threshold intrusions with an F1-score of $>0.94$. Furthermore, by validating high-noise blocks as non-compromised, we optimize the effective Secure Key Rate (SKR), recovering up to 25\% more key material in noisy regimes than traditional protocols. This research establishes a path toward more resilient and efficient quantum communication networks.
+To address this, we propose and implement the Adversarial Error-Classification Engine (AECE). The system utilizes an interspersed "Sentinel Qubit" strategy to establish a real-time environmental noise baseline. By extracting high-dimensional "Error Fingerprints"—including autocorrelation coefficients, burstiness factors, and QBER deltas—the AECE utilizes a Random Forest-based ensemble classifier to distinguish between stochastic thermal noise and deterministic state measurements. Our simulation framework (available at \href{https://github.com/sreecharan-desu/bb84-qkd}{github.com/sreecharan-desu/bb84-qkd}), built on high-performance vectorized state math, demonstrates that the AECE can detect sub-threshold intrusions with an F1-score of $>0.94$. Furthermore, by validating high-noise blocks as non-compromised, we optimize the effective Secure Key Rate (SKR), recovering up to 25\% more key material in noisy regimes than traditional protocols. This research establishes a path toward more resilient and efficient quantum communication networks.
 \end{spacing}
 
 \newpage
@@ -443,6 +446,16 @@ This project successfully expanded the traditional BB84 protocol into a robust, 
 Future research could explore the use of Recurrent Neural Networks (RNNs) for error sequence modeling, as they might capture temporal correlations even more effectively than Random Forests. Additionally, the integration of these security layers into silicon photonics hardware could lead to real-time, self-securing quantum transceivers for satellite-to-earth links where atmospheric noise is a critical factor.
 
 \newpage
+
+% =========================================================================
+% CODE AVAILABILITY
+% =========================================================================
+\section*{Open Source Code Availability}
+\addcontentsline{toc}{section}{Open Source Code Availability}
+The complete simulation framework, including the vectorized protocol engine, the AECE classifier, and plotting utilities, is open-source and available on GitHub. This repository allows for full reproduction of the results presented in this report.
+\begin{center}
+    \textbf{Repository URL:} \href{https://github.com/sreecharan-desu/bb84-qkd}{https://github.com/sreecharan-desu/bb84-qkd}
+\end{center}
 
 % =========================================================================
 % REFERENCES (BIBLIOGRAPHY)
