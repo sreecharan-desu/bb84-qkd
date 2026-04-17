@@ -63,24 +63,24 @@
 \centering
 \thispagestyle{empty}
 
-\vspace*{0.8cm}
-\includegraphics[width=0.22\linewidth]{logo.jpg}\\[0.6cm]
-{\Large \textsc{Rajiv Gandhi University of Knowledge Technologies, Ongole}}\\[0.2cm]
-{\large (RGUKT Ongole)}\\[1.5cm]
+\vspace*{0.2cm} % Tightened top margin
+\includegraphics[width=0.22\linewidth]{logo.jpg}\\[0.4cm]
+{\Large \textsc{Rajiv Gandhi University of Knowledge Technologies, Ongole}}\\[0.1cm]
+{\large (RGUKT Ongole)}\\[1cm]
 
 \textbf{Submitted in partial fulfillment of the requirements}\\
 \textbf{for }\\
 
-{\Large \textbf{Minor in Quantum Computing}}\\[1.2cm]
+{\large \textbf{Minor in Quantum Computing}}\\[0.8cm]
 
-{\huge \textbf{Adaptive Eavesdropping Detection and Secure Key Rate Optimization in BB84 QKD}}\\[0.4cm]
-{\Large via Sentinel-Correlation Fingerprinting}\\[1.5cm]
+{\huge \textbf{\textsc{Adaptive Eavesdropping Detection and Secure Key Rate Optimization in BB84 QKD}}}\\[0.3cm]
+{\Large via Sentinel-Correlation Fingerprinting}\\[0.8cm]
 
 \vfill
 
-{\large \textsc{Academic Supervision Division}}\\[0.8cm]
+{\large \textsc{Academic Supervision Division}}\\[0.4cm]
 \begin{center}
-\setlength{\tabcolsep}{20pt} % Extra padding for a clean look
+\setlength{\tabcolsep}{20pt}
 \begin{tabular}{rl}
     \textsc{Part 1: Core Design} & \textbf{\textsc{G.V. Rajasheakar}} \\
     \textsc{Part 2: Sentinel Suite} & \textbf{\textsc{Dr. D. Ravichandra}} \\
@@ -92,9 +92,9 @@
 
 \textbf{Submitted by}\\[0.2cm]
 {\large \textsc{SreeCharan Desu}}\\
-{\small O210008}\\[1.5cm]
+{\small O210008}\\[0.8cm]
 
-{\large \textbf{Institutional Leadership}}\\[0.4cm]
+{\large \textbf{Institutional Leadership}}\\[0.3cm]
 \begin{tabular}{c}
     \textbf{DEAN:} \textsc{M. Rupus Kumar} \hspace{1cm} \textbf{DIRECTOR:} \textsc{Dr. A V S S Kumara Swami Gupta}
 \end{tabular}
@@ -102,7 +102,6 @@
 \vfill
 
 {\large April 2026}
-
 \end{titlepage}
 
 \newpage
@@ -179,7 +178,8 @@ Finally, I would like to thank my family and friends for their constant support 
 \addcontentsline{toc}{section}{Abstract}
 \vspace{0.2in}
 
-\begin{spacing}{1.2}
+\begin{spacing}{1.4}
+\large
 This project report details a comprehensive research effort to modernize the security architecture of the BB84 Quantum Key Distribution (QKD) protocol. Practical QKD implementations are currently limited by the use of static error thresholds—typically the 11\% Quantum Bit Error Rate (QBER) boundary derived from the Shannon entropy of Intercept-Resend attacks. In real-world fiber-optic environments, high levels of natural decoherence can approach this threshold, leading to either unnecessary key abortion or vulnerability to adaptive eavesdropping attacks that hide within the noise floor. 
 
 To address this, we propose and implement the Adversarial Error-Classification Engine (AECE). The system utilizes an interspersed "Sentinel Qubit" strategy to establish a real-time environmental noise baseline. By extracting high-dimensional "Error Fingerprints"—including autocorrelation coefficients, burstiness factors, and QBER deltas—the AECE utilizes a Random Forest-based ensemble classifier to distinguish between stochastic thermal noise and deterministic state measurements. Our simulation framework (available at \href{https://github.com/sreecharan-desu/bb84-qkd}{github.com/sreecharan-desu/bb84-qkd}), built on high-performance vectorized state math, demonstrates that the AECE can detect sub-threshold intrusions with an F1-score of $>0.94$. Furthermore, by validating high-noise blocks as non-compromised, we optimize the effective Secure Key Rate (SKR), recovering up to 25\% more key material in noisy regimes than traditional protocols. This research establishes a path toward more resilient and efficient quantum communication networks.
