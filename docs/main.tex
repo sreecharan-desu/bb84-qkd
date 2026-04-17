@@ -24,6 +24,15 @@
 \usepackage{tikz}
 \usetikzlibrary{shapes,arrows,positioning,calc,chains}
 \geometry{left=1in, right=1in, top=1in, bottom=1in}
+\usepackage{eso-pic}
+\AddToShipoutPictureBG{%
+  \begin{tikzpicture}[remember picture, overlay]
+    % Thick outer border
+    \draw[line width=1.5pt] ($(current page.north west) + (0.7in,-0.7in)$) rectangle ($(current page.south east) + (-0.7in,0.7in)$);
+    % Thin inner border
+    \draw[line width=0.5pt] ($(current page.north west) + (0.75in,-0.75in)$) rectangle ($(current page.south east) + (-0.75in,0.75in)$);
+  \end{tikzpicture}%
+}
 
 % =========================================================================
 % CONFIGURATION
@@ -52,26 +61,43 @@
 % =========================================================================
 \begin{titlepage}
 \centering
+\thispagestyle{empty}
 
-\vspace*{0.5cm}
-\includegraphics[width=0.18\linewidth]{logo.jpg}\\[0.4cm]
-{\Large \textbf{Rajiv Gandhi University of Knowledge Technologies, Ongole}}\\[0.2cm]
-{\large (RGUKT Ongole)}\\[0.6cm]
+\vspace*{0.8cm}
+\includegraphics[width=0.22\linewidth]{logo.jpg}\\[0.6cm]
+{\Large \textsc{Rajiv Gandhi University of Knowledge Technologies, Ongole}}\\[0.2cm]
+{\large (RGUKT Ongole)}\\[1.5cm]
 
 \textbf{Submitted in partial fulfillment of the requirements}\\
 \textbf{for }\\
 
-{\Large \textbf{Minor in Quantum Computing}}\\[0.8cm]
+{\Large \textbf{Minor in Quantum Computing}}\\[1.2cm]
 
-{\Huge \textbf{Adaptive Eavesdropping Detection and Secure Key Rate Optimization in BB84 QKD}}\\[0.4cm]
-{\Large via Sentinel-Correlation Fingerprinting}\\[1cm]
+{\huge \textbf{Adaptive Eavesdropping Detection and Secure Key Rate Optimization in BB84 QKD}}\\[0.4cm]
+{\Large via Sentinel-Correlation Fingerprinting}\\[1.5cm]
+
+\vfill
+
+{\large \textsc{Academic Supervision Division}}\\[0.8cm]
+\begin{center}
+\setlength{\tabcolsep}{20pt} % Extra padding for a clean look
+\begin{tabular}{rl}
+    \textsc{Part 1: Core Design} & \textbf{\textsc{G.V. Rajasheakar}} \\
+    \textsc{Part 2: Sentinel Suite} & \textbf{\textsc{Dr. D. Ravichandra}} \\
+    \textsc{Part 3: AECE Engine} & \textbf{\textsc{G. Srenivasa Rao}} \\
+\end{tabular}
+\end{center}
+
+\vfill
 
 \textbf{Submitted by}\\[0.2cm]
-{\large SreeCharan Desu}\\
-{\small (ID No. O210008)}\\[1cm]
+{\large \textsc{SreeCharan Desu}}\\
+{\small O210008}\\[1.5cm]
 
-\textbf{Codebase Available at:}\\
-\href{https://github.com/sreecharan-desu/bb84-qkd}{github.com/sreecharan-desu/bb84-qkd}\\[1cm]
+{\large \textbf{Institutional Leadership}}\\[0.4cm]
+\begin{tabular}{c}
+    \textbf{DEAN:} \textsc{M. Rupus Kumar} \hspace{1cm} \textbf{DIRECTOR:} \textsc{Dr. A V S S Kumara Swami Gupta}
+\end{tabular}
 
 \vfill
 
@@ -86,16 +112,26 @@
 % =========================================================================
 \section*{Certificate}
 \addcontentsline{toc}{section}{Certificate}
-\vspace{0.5in}
+\vspace{0.3in}
 
 This is to certify that the project entitled \textbf{``Adaptive Eavesdropping Detection and Secure Key Rate Optimization in BB84 QKD via Sentinel-Correlation Fingerprinting''} is a bona-fide work carried out by \textbf{SreeCharan Desu} in partial fulfillment of the requirements for the award of the degree of \textbf{Minor in Quantum Computing} at Rajiv Gandhi University of Knowledge Technologies, Ongole (RGUKT Ongole).
 
-\vspace{1in}
+\vspace{0.5in}
 
-\noindent \textbf{Project Supervisor} \hfill \textbf{Head of Department} \\
-Dr. [Enter Supervisor Name] \hfill Dr. [Enter HOD Name] \\
-Assistant Professor \hfill Associate Professor \\
-Minor in Quantum Computing \hfill Minor in Quantum Computing
+\noindent \textbf{Project Supervisors:}
+
+\begin{tabular}{@{}p{0.3\textwidth} p{0.4\textwidth} p{0.3\textwidth}@{}}
+    \textbf{G.V. RAJASHEAKAR} & \textbf{DR.D. RAVICHANDRA} & \textbf{G. SRENIVASA RAO} \\
+    Assistant Professor & Assistant Professor & Assistant Professor \\
+    (Part 1: Core Design) & (Part 2: Sentinel Suite) & (Part 3: AECE Engine)
+\end{tabular}
+
+\vspace{0.8in}
+
+\noindent \textbf{Head of Department} \\
+Dr. [Enter HOD Name] \\
+Associate Professor \\
+Minor in Quantum Computing
 
 \newpage
 
@@ -122,7 +158,13 @@ I, \textbf{SreeCharan Desu}, hereby declare that the work presented in this proj
 \addcontentsline{toc}{section}{Acknowledgement}
 \vspace{0.5in}
 
-I would like to express my sincere gratitude to my project supervisor, \textbf{Dr. [Supervisor Name]}, for their invaluable guidance, encouragement, and technical insights throughout the duration of this research. Their expertise in quantum computing and information security has been instrumental in shaping the methodology of this project.
+I would like to express my sincere gratitude to my project supervisors for their invaluable guidance, encouragement, and technical insights throughout the duration of this research:
+\begin{itemize}
+    \item \textbf{G.V. RAJASHEAKAR} for his guidance on the core BB84 protocol design and vectorized simulation framework.
+    \item \textbf{DR.D. RAVICHANDRA} for his insights into statistical sentinel fingerprinting and Hoeffding bounds.
+    \item \textbf{G. SRENIVASA RAO} for his expertise in machine learning and optimization of the AECE engine.
+\end{itemize}
+Their collective expertise in quantum computing and information security has been instrumental in shaping the methodology of this project.
 
 I am also thankful to the Minor in Quantum Computing at Rajiv Gandhi University of Knowledge Technologies, Ongole (RGUKT Ongole) for providing the computational resources and environment necessary for this simulation-intensive study. 
 
