@@ -33,10 +33,11 @@ class BB84Simulation:
             if self.alice_bases[i] == bob_bases[i]:
                 # Bases matched: Bob should read the qubit correctly (minus noise).
 
-                # Eve attacks blindly: she cannot identify sentinel qubits.
+                # Eve attacks blindly: she cannot identify sentinel qubits, so she is
+                # equally likely to intercept a sentinel or a key qubit.
                 # When she intercepts a qubit and guesses the wrong basis (50% chance),
                 # she re-sends the wrong state, introducing ~25% additional errors.
-                is_eve_hit = eve_present and (not self.sentinel_mask[i]) and random.random() < 0.30
+                is_eve_hit = eve_present and random.random() < 0.30
                 err_prob = p_noise + (0.25 if is_eve_hit else 0)
 
                 if random.random() < err_prob:
@@ -65,61 +66,51 @@ class BB84Simulation:
 def run_demo():
     print("\n" + "="*60)
     print(" PROJECT: QUANTUM KEY DISTRIBUTION - SENTINEL CORRELATION ")
-    print(" DESCRIPTION: DETECTING INTRUDERS IN A NOISY FIBER CHANNEL ")
+    print(" WHAT THIS DEMO SHOWS: WHAT SENTINELS CAN AND CANNOT DETECT ")
     print("="*60 + "\n")
 
     print("BACKGROUND:")
-    print("  Alice wants to send a secret key to Bob through a fiber-optic cable.")
-    print("  An eavesdropper (Eve) may try to listen in. Due to quantum physics,")
-    print("  any measurement Eve makes inevitably disturbs the qubits she touches.")
-    print("  Our system uses 'sentinel qubits' as a silent alarm to catch her.\n")
+    print("  Alice sends a key to Bob over a fiber cable. Eve may intercept qubits.")
+    print("  Any measurement Eve makes disturbs some qubits, which raises the error rate.")
+    print("  We also mark 20% of qubits as 'sentinels' and compare their error rate")
+    print("  with the key qubits' error rate.\n")
 
     sim = BB84Simulation(n_bits=2000)
+    QBER_LIMIT = 11.0
+    DELTA_THRESHOLD = 2.0
+
+    def report(eve_present):
+        s_qber, k_qber = sim.run(eve_present=eve_present)
+        total = (s_qber * 0.2 + k_qber * 0.8) * 100  # approximate overall error rate
+        delta = (k_qber - s_qber) * 100
+        print(f"  Sentinel Error Rate : {s_qber*100:.2f}%")
+        print(f"  Key Data Error Rate : {k_qber*100:.2f}%")
+        print(f"  Overall Error Rate  : {total:.2f}%  (abort limit {QBER_LIMIT:.0f}%)")
+        print(f"  Delta (key - sent.) : {delta:.2f}%  (sentinel threshold {DELTA_THRESHOLD:.0f}%)")
+        print(f"  Sentinel delta flag : {'YES' if abs(delta) > DELTA_THRESHOLD else 'no'}")
+        print(f"  11% QBER abort      : {'YES' if total > QBER_LIMIT else 'no'}\n")
 
     print("-"*60)
-    print("[STEP 1] SIMULATING A CLEAN, NOISY-BUT-SECURE CHANNEL")
+    print("[STEP 1] NO EAVESDROPPER")
     print("-"*60)
-    print("  Scenario: Eve is NOT present. Alice and Bob communicate normally.")
-    print("  The fiber cable itself introduces a small amount of random error (~3%).")
-    print("  Since no one is eavesdropping, both sentinel and key qubits should")
-    print("  have roughly the same error rate — both affected equally by fiber noise.\n")
+    print("  Only fiber noise (~3%). Sentinel and key qubits see the same noise.\n")
     time.sleep(1)
-    s_qber, k_qber = sim.run(eve_present=False)
-    delta_clean = abs(k_qber - s_qber) * 100
-    print(f"  Sentinel Error Rate : {s_qber*100:.2f}%  (only natural noise)")
-    print(f"  Key Data Error Rate : {k_qber*100:.2f}%  (only natural noise)")
-    print(f"  Delta (difference)  : {delta_clean:.2f}%")
-    print(f"  ANALYSIS: The delta is tiny. Both streams are affected equally by noise.")
-    print(f"  VERDICT : CHANNEL IS SECURE. No intruder detected.\n")
+    report(False)
 
     print("-"*60)
-    print("[STEP 2] SIMULATING AN ACTIVE EAVESDROPPER (EVE IS LISTENING)")
+    print("[STEP 2] BLIND EAVESDROPPER")
     print("-"*60)
-    print("  Scenario: Eve intercepts some qubits between Alice and Bob.")
-    print("  She cannot tell which qubits are sentinels, so she attacks blindly.")
-    print("  As a result, the KEY qubit error rate spikes, while the SENTINEL")
-    print("  error rate stays low (Eve missed those). This gap is our fingerprint.\n")
+    print("  Eve intercepts 30% of qubits at random. She cannot tell sentinels from")
+    print("  key qubits, so both error rates rise by about the same amount.\n")
     time.sleep(1)
-    s_qber_e, k_qber_e = sim.run(eve_present=True)
-    delta_attack = (k_qber_e - s_qber_e) * 100
-    print(f"  Sentinel Error Rate : {s_qber_e*100:.2f}%  (natural noise baseline)")
-    print(f"  Key Data Error Rate : {k_qber_e*100:.2f}%  (elevated by Eve's interference)")
-    print(f"  Delta (difference)  : {delta_attack:.2f}%")
-    print()
+    report(True)
 
-    DETECTION_THRESHOLD = 2.0
-    if abs(delta_attack) > DETECTION_THRESHOLD:
-        print(f"  ANALYSIS: The delta ({delta_attack:.2f}%) exceeded the safety threshold of {DETECTION_THRESHOLD}%.")
-        print(f"  The sentinel qubits are clean, but the key data is corrupted.")
-        print(f"  This imbalance is the hallmark of a targeted eavesdropping attack.")
-        print(f"  VERDICT : INTRUSION DETECTED. Session aborted. Key material discarded.")
-    else:
-        print(f"  ANALYSIS: Delta is within normal range. Could not confirm intrusion.")
-        print(f"  VERDICT : NO INTRUSION CONFIRMED this session.")
-
-    print("\n" + "="*60)
-    print(" FINAL RESULT: Sentinel-Correlation Fingerprinting works as designed.")
-    print(" The system correctly identified the presence (or absence) of Eve.")
+    print("="*60)
+    print(" RESULT: Eve raises the overall error rate, which is what standard BB84")
+    print(" already checks. Because a blind Eve disturbs sentinel and key qubits")
+    print(" equally, the sentinel delta stays near zero on average. It swings more")
+    print(" when Eve is present only because there are more errors overall, so it")
+    print(" adds nothing beyond the overall error rate.")
     print("="*60 + "\n")
 
 
