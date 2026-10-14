@@ -91,7 +91,7 @@ AECE is never above classic, at any p or seed. It can't be: it only adds aborts,
 - `notebook/QT002_sentinel.ipynb`, `demo.py`: fixed so Eve is blind to sentinels and the output reports the overall QBER honestly.
 - `notebook/QT001_core.ipynb`: early exploration with an abstract error model (an intercepted qubit adds a flat 25% error). It isn't a polarization simulation.
 - `notebook/QT003_aece.ipynb`: early prototype trained on **mocked** data, where attack sessions are *given* a higher delta and burstiness by construction. Its accuracy says nothing about real detection.
-- `paper/CORRECTED_PAPER.md`: the corrected write-up. `paper/bb84_fingerprint_paper.pdf` is the **original, superseded** paper. Its claims are wrong, and its source isn't available to regenerate it.
+- `paper/bb84_corrected_paper.pdf`: the corrected paper (LaTeX source `paper/corrected_paper.tex`, same content as `paper/CORRECTED_PAPER.md`). `paper/bb84_fingerprint_paper.pdf` is the **original, superseded** paper, built from `docs/main.tex`. Its claims are wrong.
 - `docs/*.tex`: the original course reports, also superseded (see `docs/CORRECTION.md`).
 
 Requirements: python 3.9+, `numpy`, `scikit-learn`, `matplotlib`.

@@ -2,7 +2,7 @@
 
 **Sree Charan Desu**, IIIT Andhra Pradesh (sreecharan309@gmail.com)
 
-> This document replaces the claims in `bb84_fingerprint_paper.pdf`. The PDF reported that sentinel-qubit error fingerprints plus a random-forest classifier (AECE) detect sub-threshold eavesdropping and raise the secure key rate. Those results came from a simulator with physics bugs (Section 2). The source for the PDF isn't available, so it hasn't been regenerated. Every number below comes from `notebook/bb84.ipynb`.
+> This document replaces the claims in `bb84_fingerprint_paper.pdf`. The PDF reported that sentinel-qubit error fingerprints plus a random-forest classifier (AECE) detect sub-threshold eavesdropping and raise the secure key rate. Those results came from a simulator with physics bugs (Section 2). The corrected PDF is `bb84_corrected_paper.pdf` (LaTeX source: `corrected_paper.tex`). Every number below comes from `notebook/bb84.ipynb`.
 
 ## Abstract
 
